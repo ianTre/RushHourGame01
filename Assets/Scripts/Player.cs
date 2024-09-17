@@ -12,6 +12,10 @@ public class Player
 
     public void CalculateVelocity()
     {
-        this.Velocity += Acceleration;
+        if (Velocity == 0.01f)
+        {this.Velocity = Velocity;}
+        else
+        {this.Velocity += Acceleration;}
+
     }
 }
