@@ -5,60 +5,72 @@ using UnityEngine.UIElements;
 public class VehicleController : MonoBehaviour
 {
     public Transform myTransform;
-    public float GetX,GetY;
     Player player ;
+    [SerializeField] float acceleration;
+    [SerializeField] float velocity;
+    [SerializeField] float rotationSpeed;
+    [SerializeField] ParticleSystem smoke;
+    private bool isSmokeActive = false;
     // Start is called before the first frame update
     void Start()
     {
         Debug.Log("I am alive now");
         myTransform = this.GetComponent<Transform>();
-        player = new Player(0.00001f);
+        player = new Player(0.001f);
     }
 
     // Update is called once per frame
     void Update()
     {
+        AccelerationGradient ActualGradient = AccelerationGradient.None;
+        
         if(Input.GetAxis("Vertical") == 1)
         {
-            player.CalculateVelocity();
-            this.myTransform.position = new Vector3(myTransform.position.x , myTransform.position.y + player.Velocity);
+             ActualGradient = AccelerationGradient.Accelerate;
+        }
 
-            /*f(myTransform.rotation.z == 0) 
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            ActualGradient = AccelerationGradient.FastAccelerate;
+            
+            if(!isSmokeActive)
             {
-                this.myTransform.position = new Vector3(myTransform.position.x , myTransform.position.y + player.Velocity);
-            }
-            else
-            {
-                this.myTransform.position = new Vector3(myTransform.position.x + player.Velocity, myTransform.position.y + player.Velocity);
+                smoke.Play();
+                Invoke("StopSmoke",5);
+                this.isSmokeActive = true;
             }
             
-            if(myTransform.rotation.z == 90 || myTransform.rotation.z != -90)
-            {
-                this.myTransform.position = new Vector3(myTransform.position.x + player.Velocity, myTransform.position.y);
-            }
-            else
-            {
-                this.myTransform.position = new Vector3(myTransform.position.x, myTransform.position.y + player.Velocity);
-            }*/
         }
 
          if(Input.GetAxis("Vertical") == -1)
         {
-            player.CalculateVelocity ();
-            this.myTransform.position = new Vector3(myTransform.position.x , myTransform.position.y - player.Velocity);
+            ActualGradient = AccelerationGradient.Deccelerate;
         }
 
           if(Input.GetAxis("Horizontal") == 1)
         {
-            player.CalculateVelocity ();
-            this.myTransform.rotation = new Quaternion(myTransform.rotation.x , myTransform.rotation.y, myTransform.rotation.z - 0.01f, myTransform.rotation.w);
-       
+            if(this.player.Velocity > 0)
+                this.transform.Rotate(0,0,-1 * rotationSpeed);
         }
 
           if(Input.GetAxis("Horizontal") == -1)
         {
-            player.CalculateVelocity ();
-            this.myTransform.rotation = new Quaternion(myTransform.rotation.x , myTransform.rotation.y, myTransform.rotation.z + 0.01f, myTransform.rotation.w);
+            if(this.player.Velocity > 0)
+                this.transform.Rotate(0,0,rotationSpeed);
         }
+
+        player.CalculateAcceleration(ActualGradient);
+        this.acceleration = player.Accelaration;
+        this.velocity = player.Velocity;
+        //this.myTransform.position = new Vector3(myTransform.position.x , myTransform.position.y + player.Velocity);
+        Vector3 vector3 = new Vector3(0,player.Velocity,0);
+        this.myTransform.Translate(vector3);
+    }
+
+
+    private void StopSmoke()
+    {
+        this.isSmokeActive = false;
+        smoke.Stop();
     }
 }
