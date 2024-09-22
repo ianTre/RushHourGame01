@@ -56,7 +56,9 @@ public class Player
 
         if(gradient == AccelerationGradient.Deccelerate)
         {
-
+            Accelaration = AccelerationRate;
+            if (Velocity < maxVelocity) //Max velocity
+                this.Velocity -= Accelaration;
         }
         CalculateVelocity();
     }
