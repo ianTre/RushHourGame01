@@ -5,8 +5,8 @@ public class Player
     public float Velocity { get; set; }
     private float AccelerationRate { get; set; }
     public float Accelaration { get; set; }
-    private float maxVelocity = 2f;
-    private float slowVelocityBias = 0.1f;
+    private float maxVelocity = 25f;
+    private float slowVelocityBias = 0.5f;
 
     
     public Player(float AccelerationRate)
@@ -33,9 +33,9 @@ public class Player
 
         if(gradient == AccelerationGradient.FastAccelerate)
         {
-            if(this.Velocity < 0.1)
+            if(this.Velocity < 2)
             {
-                this.Velocity = 0.3f;
+                this.Velocity = 10f;
                 this.Velocity += Accelaration;
             }
         }
