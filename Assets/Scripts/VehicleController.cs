@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using TMPro;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -8,7 +9,7 @@ using UnityEngine.UIElements;
 
 public class VehicleController : MonoBehaviour
 {
-    AudioSource Accelerate; 
+    AudioSource accelerateSound; 
     public Transform myTransform;
     public Player player ;
     [SerializeField] float Initialacceleration;
@@ -18,14 +19,15 @@ public class VehicleController : MonoBehaviour
 
     private bool isSmokeActive = false;
     private bool isCarsoundActive = false;
-    private bool keypressing;
-    private bool keyunpressing;
+    private bool upArrowKeyPressed;
+    private bool upArrowKeyReleased;
 
     // Start is called before the first frame update
     void Start()
     {
         myTransform = this.GetComponent<Transform>();
         player = new Player(Initialacceleration);
+        accelerateSound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -33,22 +35,18 @@ public class VehicleController : MonoBehaviour
     {
         AccelerationGradient ActualGradient = AccelerationGradient.None;
         
-        keypressing = Input.GetKeyDown(KeyCode.UpArrow);
-        keyunpressing = Input.GetKeyUp(KeyCode.UpArrow);
+        upArrowKeyPressed = Input.GetKeyDown(KeyCode.UpArrow);
+        upArrowKeyReleased = Input.GetKeyUp(KeyCode.UpArrow);
          
-        if (keypressing && !isCarsoundActive)
+        if (upArrowKeyPressed && !isCarsoundActive)
         {
-            Accelerate = GetComponent<AudioSource>();
-            Accelerate.Play();
+            accelerateSound.Play();
             this.isCarsoundActive = true;
-
         }
 
-        if (keyunpressing && isCarsoundActive)
+        if (upArrowKeyReleased && isCarsoundActive)
         {
-            Accelerate = GetComponent<AudioSource>();
-            Invoke("StopCarSound", 2);
-
+            Invoke("StopCarSound", 0.1f);
         }
 
         if (Input.GetAxis("Vertical") == 1)
@@ -83,13 +81,13 @@ public class VehicleController : MonoBehaviour
 
           if(Input.GetAxis("Horizontal") == 1)
         {
-            if(this.player.Velocity > 0)
+            if(this.player.Velocity != 0)
                 this.transform.Rotate(0,0,-1 * rotationSpeed);
         }
 
           if(Input.GetAxis("Horizontal") == -1)
         {
-            if(this.player.Velocity > 0)
+            if(this.player.Velocity != 0)
                 this.transform.Rotate(0,0,rotationSpeed);
         }
 
@@ -99,13 +97,24 @@ public class VehicleController : MonoBehaviour
        
         }
 
+        //Accelerate
         player.CalculateAcceleration(ActualGradient);
         this.velocity = player.Velocity;
-        //this.myTransform.position = new Vector3(myTransform.position.x , myTransform.position.y + player.Velocity);
+        //Accelerate sound
+        CalculateAccelerateSoundVolume();
+    
+        //Player movement
         Vector3 vector3 = new Vector3(0,velocity * Time.deltaTime,0);
         this.myTransform.Translate(vector3);
     }
 
+    private void CalculateAccelerateSoundVolume()
+    {
+        float soundFraction = player.Velocity / player.maxVelocity;
+        accelerateSound.volume = soundFraction;
+        if(soundFraction == 0 && !isCarsoundActive)
+            accelerateSound.Stop();
+    }
 
     private void StopSmoke()
     {
@@ -114,9 +123,6 @@ public class VehicleController : MonoBehaviour
     }
     private void StopCarSound()
     {
-        Accelerate.SetScheduledEndTime(velocity);
         this.isCarsoundActive = false;
-
-
     }
 }

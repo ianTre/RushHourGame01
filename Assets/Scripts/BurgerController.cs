@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.PlasticSCM.Editor;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -26,6 +27,7 @@ public class BurgerController : MonoBehaviour
                 successAudio.Play();
                 spriteRenderer = GetComponent<SpriteRenderer>();
                 spriteRenderer.color = Color.green;
+                vehicleController.player.IncreaseHambugerCount();
                 Invoke("RemoveHambuger",3);
             }
         }

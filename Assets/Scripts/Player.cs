@@ -1,13 +1,17 @@
+using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
+
 public class Player
 {
     public int Lives { get; set; }
-    public int Score { get; set; }
+    private int score = 0;
     public float Velocity { get; set; }
     private float AccelerationRate { get; set; }
     public float Accelaration { get; set; }
-    private float maxVelocity = 25f;
+    public float maxVelocity = 25f;
+    private float reverseMaxVelocity = -10f;
     private float slowVelocityBias = 0.5f;
-
+    private int HamburgerCount = 0;
     
     public Player(float AccelerationRate)
     {
@@ -33,7 +37,7 @@ public class Player
 
         if(gradient == AccelerationGradient.FastAccelerate)
         {
-            if(this.Velocity > 0)
+            if(this.Velocity > 0 && this.Velocity < maxVelocity*2)
             {
                 this.Velocity = Velocity * 1.01f;
                 this.Velocity += Accelaration;
@@ -57,8 +61,15 @@ public class Player
         if(gradient == AccelerationGradient.Deccelerate)
         {
             Accelaration = AccelerationRate;
-            if (Velocity < maxVelocity) //Max velocity
+            if(Velocity > 0)
+            {
                 this.Velocity -= Accelaration;
+            }
+            else
+            {
+                if(Velocity > reverseMaxVelocity)
+                    this.Velocity -= Accelaration;
+            }
         }
 
         if (gradient == AccelerationGradient.HandBreake)
@@ -70,14 +81,33 @@ public class Player
                     this.Velocity -= Accelaration;
             }
         }
-        CalculateVelocity();
     }
 
-    public void CalculateVelocity()
+    public int GetHambugers()
     {
-        
-        
+        return this.HamburgerCount;
     }
+
+    public void IncreaseHambugerCount()
+    {
+        this.HamburgerCount++;
+    }
+
+    public void DecreaseHambugerCount()
+    {
+        this.HamburgerCount--;
+    }
+
+    public int Score()
+    {
+        return this.score;
+    }
+
+    public void IncreaseScore(int amount)
+    {
+        this.score = this.score + amount;
+    }
+
 }
 
 public enum AccelerationGradient
