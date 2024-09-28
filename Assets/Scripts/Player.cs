@@ -33,9 +33,9 @@ public class Player
 
         if(gradient == AccelerationGradient.FastAccelerate)
         {
-            if(this.Velocity < 2)
+            if(this.Velocity > 0)
             {
-                this.Velocity = 10f;
+                this.Velocity = Velocity * 1.01f;
                 this.Velocity += Accelaration;
             }
         }
@@ -59,6 +59,16 @@ public class Player
             Accelaration = AccelerationRate;
             if (Velocity < maxVelocity) //Max velocity
                 this.Velocity -= Accelaration;
+        }
+
+        if (gradient == AccelerationGradient.HandBreake)
+        {
+            if (Velocity > 0)
+            {
+                Accelaration = AccelerationRate * 2;
+                if (Velocity < maxVelocity) //Max velocity
+                    this.Velocity -= Accelaration;
+            }
         }
         CalculateVelocity();
     }

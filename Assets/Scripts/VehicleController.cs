@@ -1,20 +1,29 @@
+using System;
+using System.ComponentModel;
 using Unity.Mathematics;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class VehicleController : MonoBehaviour
 {
+    AudioSource Accelerate; 
     public Transform myTransform;
     public Player player ;
     [SerializeField] float Initialacceleration;
     [SerializeField] float velocity;
     [SerializeField] float rotationSpeed;
     [SerializeField] ParticleSystem smoke;
+
     private bool isSmokeActive = false;
+    private bool isCarsoundActive = false;
+    private bool keypressing;
+    private bool keyunpressing;
+
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("I am alive now");
         myTransform = this.GetComponent<Transform>();
         player = new Player(Initialacceleration);
     }
@@ -24,12 +33,31 @@ public class VehicleController : MonoBehaviour
     {
         AccelerationGradient ActualGradient = AccelerationGradient.None;
         
-        if(Input.GetAxis("Vertical") == 1)
+        keypressing = Input.GetKeyDown(KeyCode.UpArrow);
+        keyunpressing = Input.GetKeyUp(KeyCode.UpArrow);
+         
+        if (keypressing && !isCarsoundActive)
         {
-             ActualGradient = AccelerationGradient.Accelerate;
+            Accelerate = GetComponent<AudioSource>();
+            Accelerate.Play();
+            this.isCarsoundActive = true;
+
         }
 
-        if(Input.GetKey(KeyCode.LeftShift))
+        if (keyunpressing && isCarsoundActive)
+        {
+            Accelerate = GetComponent<AudioSource>();
+            Invoke("StopCarSound", 2);
+
+        }
+
+        if (Input.GetAxis("Vertical") == 1)
+        {
+            ActualGradient = AccelerationGradient.Accelerate;
+         
+        }
+
+        if(Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") == 1)
         {
             ActualGradient = AccelerationGradient.FastAccelerate;
             
@@ -40,10 +68,17 @@ public class VehicleController : MonoBehaviour
                 this.isSmokeActive = true;
             }
         }
+        
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") == -1)
+        {
+            ActualGradient = AccelerationGradient.FastAccelerate;
+           
+        }
 
-         if(Input.GetAxis("Vertical") == -1)
+        if (Input.GetAxis("Vertical") == -1)
         {
             ActualGradient = AccelerationGradient.Deccelerate;
+  
         }
 
           if(Input.GetAxis("Horizontal") == 1)
@@ -58,6 +93,12 @@ public class VehicleController : MonoBehaviour
                 this.transform.Rotate(0,0,rotationSpeed);
         }
 
+        if (Input.GetKey(KeyCode.Space) )
+        {
+            ActualGradient = AccelerationGradient.HandBreake;
+       
+        }
+
         player.CalculateAcceleration(ActualGradient);
         this.velocity = player.Velocity;
         //this.myTransform.position = new Vector3(myTransform.position.x , myTransform.position.y + player.Velocity);
@@ -70,5 +111,12 @@ public class VehicleController : MonoBehaviour
     {
         this.isSmokeActive = false;
         smoke.Stop();
+    }
+    private void StopCarSound()
+    {
+        Accelerate.SetScheduledEndTime(velocity);
+        this.isCarsoundActive = false;
+
+
     }
 }
