@@ -10,6 +10,7 @@ public class CanvasGameController : MonoBehaviour
     [SerializeField] Text scoreText;
     [SerializeField] Text HamburgerText;
     Player player = null;
+    public float priceToUpdate;
     void Start()
     {
     }

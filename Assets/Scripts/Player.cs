@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
@@ -12,6 +13,7 @@ public class Player
     private float reverseMaxVelocity = -10f;
     private float slowVelocityBias = 0.5f;
     private int HamburgerCount = 0;
+    List<BurgerController> hamburgers;
     
     public Player(float AccelerationRate)
     {

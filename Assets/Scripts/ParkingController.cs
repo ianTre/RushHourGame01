@@ -7,6 +7,7 @@ public class ParkingController : MonoBehaviour
     // Start is called before the first frame update
     bool hasBeenTriggered = false;
     Player player;
+    public BurgerController burgerController;
     void OnTriggerStay2D(Collider2D other)
     {
         
@@ -29,6 +30,8 @@ public class ParkingController : MonoBehaviour
 
     void RemoveParkingLot()
     {
+        burgerController = this.transform.parent.GetComponent<BurgerController>();
+        burgerController.RemoveHambuger();
         Destroy(this.gameObject);
     }
 }
