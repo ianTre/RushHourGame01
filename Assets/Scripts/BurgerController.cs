@@ -14,7 +14,7 @@ public class BurgerController : MonoBehaviour
     bool hasBeenTriggered=false;
     VehicleController vehicleController;
     GameObject parkingLotGameObject;
-    public Hambuger hambuger;
+    public Hambuger hamburger;
     private HambugerSpawnerController hambugerSpawnerController;
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -37,24 +37,28 @@ public class BurgerController : MonoBehaviour
         }
     }
 
+    //YOU PICK AN HAMBURGER
     private void AsssignNewMission()
     {
         hambugerSpawnerController = FindObjectOfType<HambugerSpawnerController>();
         hambugerSpawnerController.activeMissions++;
         spriteRenderer = GetComponent<SpriteRenderer>();
-        hambuger = this.gameObject.GetComponent<Hambuger>();
-        spriteRenderer.color = hambuger.color;
+        hamburger = this.gameObject.GetComponent<Hambuger>();
+        spriteRenderer.color = hamburger.color;
+        hamburger.timeToEndMission = 240;
+        hamburger.activeMission = true;
         vehicleController.player.IncreaseHambugerCount();
         parkingLotGameObject = this.gameObject.transform.GetChild(0).gameObject;
         parkingLotGameObject.SetActive(true);
-        parkingLotGameObject.GetComponent<SpriteRenderer>().color = hambuger.color;
+        parkingLotGameObject.GetComponent<SpriteRenderer>().color = hamburger.color;
     }
 
 
 
     public void RemoveHambuger()
     {
-        hambugerSpawnerController.returnColor(this.hambuger.color);
+        hambugerSpawnerController.returnColor(this.hamburger.color);
+        FindObjectOfType<CanvasGameController>().removeHamburger(this.hamburger);
         Destroy(this.gameObject);
     }
 

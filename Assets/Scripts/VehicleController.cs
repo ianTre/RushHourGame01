@@ -110,7 +110,7 @@ public class VehicleController : MonoBehaviour
 
     private void CalculateAccelerateSoundVolume()
     {
-        float soundFraction = player.Velocity / player.maxVelocity;
+        float soundFraction = ( player.Velocity / player.maxVelocity ) / 2;
         accelerateSound.volume = soundFraction;
         if(soundFraction == 0 && !isCarsoundActive)
             accelerateSound.Stop();
