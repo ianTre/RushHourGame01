@@ -8243,7 +8243,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7013593998070052907, guid: 2f6166157fc2b2240bef1db5bfe0cb1d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8409647018202409077, guid: 2f6166157fc2b2240bef1db5bfe0cb1d, type: 3}
+      propertyPath: m_Color.b
+      value: 0.06132078
+      objectReference: {fileID: 0}
+    - target: {fileID: 8409647018202409077, guid: 2f6166157fc2b2240bef1db5bfe0cb1d, type: 3}
+      propertyPath: m_Color.g
+      value: 0.06132078
+      objectReference: {fileID: 0}
+    - target: {fileID: 8409647018202409077, guid: 2f6166157fc2b2240bef1db5bfe0cb1d, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17298,11 +17310,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 24.6
+  near clip plane: 20
   far clip plane: 73.51
   field of view: 60
   orthographic: 1
-  orthographic size: 35.1
+  orthographic size: 500
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -24937,11 +24949,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5887636936379006921, guid: fa8bd6b24f057fa4991f5512439d2a59, type: 3}
       propertyPath: near clip plane
-      value: 24.6
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5887636936379006921, guid: fa8bd6b24f057fa4991f5512439d2a59, type: 3}
       propertyPath: orthographic size
-      value: 35.1
+      value: 500
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
