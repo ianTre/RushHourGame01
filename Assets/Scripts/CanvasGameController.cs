@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,8 +31,8 @@ public class CanvasGameController : MonoBehaviour
 
     public void AddNewHamburger(Hambuger burger)
     {
+        burger.beingTracked = true;
         burgers.Add(burger);
-        Debug.Log("Adding new hamburger");
     }
 
     public void removeHamburger(Hambuger burger)
@@ -41,48 +42,52 @@ public class CanvasGameController : MonoBehaviour
         Slider slider = icon.transform.Find("Slider").GetComponent<Slider>();
         slider.maxValue = 0;
         slider.value = 0;
-
-        burger.DisAssociateIcon();
+        Transform fill = slider.transform.Find("Fill Area").transform.Find("Fill");
+        fill.GetComponent<Image>().color = new Color(0,0,0,0);
     }
 
     void Update()
     {
-        if(player == null)
+        if (player == null)
         {
             player = FindObjectOfType<VehicleController>().player;
-        }   
-        this.scoreText.text = this.scoreText.text.Replace("[Score]",player.Score().ToString());
-        
+        }
+        this.scoreText.text = this.scoreText.text.Replace("[Score]", player.Score().ToString());
+
         int index = 0;
         foreach (var burger in burgers)
         {
             burgerIcons[index].transform.position = positions[index]; //REVIEW THIS. IS NOT WORKING.
             burger.AssociateIcon(burgerIcons[index].gameObject);
-            if(burger.visibleOnMap)
+            if (burger.visibleOnMap)
             {
                 burgerIcons[index].GetComponent<RawImage>().color = burger.color;
 
             }
-            if(burger.activeMission )
+
+            if (burger.activeMission) //6000 : 5998 / 2
             {
                 Transform slider = burgerIcons[index].transform.Find("Slider");
 
-                
-                if(!burger.hasBeingColored)
+
+                if (!burger.hasBeingColored)
                 {
-                    Transform fill = slider.transform.Find("Fill Area").transform.Find("Fill");    
+                    Transform fill = slider.transform.Find("Fill Area").transform.Find("Fill");
                     fill.GetComponent<Image>().color = burger.color;
                     slider.GetComponent<Slider>().maxValue = burger.timeToEndMission;
-                    burger.hasBeingColored =true;
+                    burger.hasBeingColored = true;
                 }
                 else
                 {
                     slider.GetComponent<Slider>().value = burger.timeToEndMission;
                 }
+
+                if (burger.timeToEndMission == 0) //MISSION TIME OUT
+                {
+                    burger.beingTracked = false;
+                }
             }
-            
             index++;
         }
-        
     }
 }

@@ -10,7 +10,7 @@ public class ParkingController : MonoBehaviour
     public BurgerController burgerController;
     void OnTriggerStay2D(Collider2D other)
     {
-        
+        //MISSION SUCCES
         AudioSource successAudio;
         if(other.tag == "Player" )
         {
