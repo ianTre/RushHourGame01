@@ -37,7 +37,7 @@ public class BurgerController : MonoBehaviour
         }
     }
 
-    //YOU PICK AN HAMBURGER
+    //YOU PICK A HAMBURGER
     private void AsssignNewMission()
     {
         hambugerSpawnerController = FindObjectOfType<HambugerSpawnerController>();
