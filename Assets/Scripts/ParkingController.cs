@@ -16,7 +16,7 @@ public class ParkingController : MonoBehaviour
         {
             VehicleController vehicleController = other.GetComponent<VehicleController>();
             player = vehicleController.player;
-            if((float)player.Velocity == 0f && !hasBeenTriggered && player.GetHambugers() > 0)
+            if((float)player.actualSpeed == 0f && !hasBeenTriggered && player.GetHambugers() > 0)
             {
                 hasBeenTriggered = true;
                 successAudio = GetComponent<AudioSource>();

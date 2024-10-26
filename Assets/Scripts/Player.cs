@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
@@ -6,83 +8,68 @@ public class Player
 {
     public int Lives { get; set; }
     private int score = 0;
-    public float Velocity { get; set; }
-    private float AccelerationRate { get; set; }
+    public float VelocityRate { get; set; }
+    public float actualSpeed;
     public float Accelaration { get; set; }
-    public float maxVelocity = 25f;
-    private float reverseMaxVelocity = -10f;
-    private float slowVelocityBias = 0.5f;
+    public float maxVelocity = 50f;
+    public float minVelocity = 20f;
+    private float reverseMaxVelocity = 10f;
     private int HamburgerCount = 0;
     List<BurgerController> hamburgers;
     
     public Player(float AccelerationRate)
     {
-        this.AccelerationRate = AccelerationRate;
+        this.Accelaration = AccelerationRate;
+        this.VelocityRate = minVelocity;
     }
 
-    /// <summary>
     /// Calculate new velocity.
-    /// </summary>
-    /// <param name="gradient">Gradient to know direction of acceleration force. Param can be 
-    /// 1 : Accelerate
-    /// 0 : No Accelerate ( friction force will apply to acceleration)
-    /// -1: Negative Accelerate ( can be break or reverse)
-    /// </param>
-    public void CalculateAcceleration(AccelerationGradient gradient)
+    public float CalculateSpeed(AccelerationGradient gradient)
     {
         if(gradient == AccelerationGradient.Accelerate) //Accelerate
         {
-            Accelaration = AccelerationRate;
-            if (Velocity < maxVelocity) //Max velocity
-                this.Velocity += Accelaration;
+            if (VelocityRate < maxVelocity) //Max velocity
+                this.VelocityRate += Accelaration;
+            else
+            {
+                this.VelocityRate -= Accelaration;
+            }
         }
 
         if(gradient == AccelerationGradient.FastAccelerate)
         {
-            if(this.Velocity > 0 && this.Velocity < maxVelocity*2)
+            Console.Write("Fast Accelerate !!");
+            if(this.VelocityRate < maxVelocity*2)
             {
-                this.Velocity = Velocity * 1.01f;
-                this.Velocity += Accelaration;
+                this.VelocityRate += Accelaration * 1.5f;
             }
         }
 
-        if(gradient == AccelerationGradient.None) //
+        if(gradient == AccelerationGradient.None) 
         {
-            this.Accelaration = 0;
-            if(this.Velocity > 0)
+            if(this.VelocityRate > minVelocity)
             {
-                this.Velocity = this.Velocity  * 0.995f;
+                this.VelocityRate--;
+                Console.Write("slow down WR !!");
             }
-            
-            if( this.Velocity < slowVelocityBias)
-            {
-                this.Velocity = 0;
-            }
+                
         }
 
         if(gradient == AccelerationGradient.Deccelerate)
         {
-            Accelaration = AccelerationRate;
-            if(Velocity > 0)
-            {
-                this.Velocity -= Accelaration;
-            }
-            else
-            {
-                if(Velocity > reverseMaxVelocity)
-                    this.Velocity -= Accelaration;
-            }
+            this.VelocityRate = reverseMaxVelocity;
         }
 
         if (gradient == AccelerationGradient.HandBreake)
         {
-            if (Velocity > 0)
+            Console.Write("Hand breake !!");
+            if (VelocityRate > 0)
             {
-                Accelaration = AccelerationRate * 2;
-                if (Velocity < maxVelocity) //Max velocity
-                    this.Velocity -= Accelaration;
+                VelocityRate = VelocityRate/2;
             }
         }
+
+        return this.VelocityRate;
     }
 
     public int GetHambugers()

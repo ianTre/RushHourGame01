@@ -26,7 +26,7 @@ public class BurgerController : MonoBehaviour
         if(other.tag == "Player" )
         {
             vehicleController = other.GetComponent<VehicleController>();
-            if((float)vehicleController.player.Velocity == 0f && !hasBeenTriggered)
+            if((float)vehicleController.player.actualSpeed == 0f && !hasBeenTriggered)
             {
                 hasBeenTriggered = true;
                 successAudio = GetComponent<AudioSource>();
