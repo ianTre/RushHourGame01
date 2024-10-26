@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -15,6 +16,7 @@ public class Hambuger : MonoBehaviour
     public bool activeMission = false;
     public float timeToEndMission;
     public float timeToPickMission;
+    public bool beingTracked; //Used for programming purpose only
     private GameObject hamburgerIcon;
 
     void Start()
@@ -25,11 +27,6 @@ public class Hambuger : MonoBehaviour
     public void AssociateIcon(GameObject icon)
     {   
         this.hamburgerIcon = icon;
-    }
-
-    public void DisAssociateIcon()
-    {
-        this.hamburgerIcon = null;
     }
 
     public GameObject GetIcon()
@@ -43,7 +40,17 @@ public class Hambuger : MonoBehaviour
             timeToPickMission = timeToPickMission - Time.deltaTime;
 
         if(activeMission)
+        {
             timeToEndMission = timeToEndMission - Time.deltaTime;
+            if(timeToEndMission <= 0f )
+            {
+                Debug.Log("Mission failed");
+                //MISSION FAILED 
+                BurgerController burgerController = this.gameObject.GetComponent<BurgerController>();
+                burgerController.RemoveHambuger();
+            }
+        }   
+        
     }
 
 }

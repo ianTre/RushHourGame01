@@ -26,7 +26,7 @@ public class BurgerController : MonoBehaviour
         if(other.tag == "Player" )
         {
             vehicleController = other.GetComponent<VehicleController>();
-            if((float)vehicleController.player.Velocity == 0f && !hasBeenTriggered)
+            if((float)vehicleController.player.actualSpeed == 0f && !hasBeenTriggered)
             {
                 hasBeenTriggered = true;
                 successAudio = GetComponent<AudioSource>();
@@ -45,8 +45,8 @@ public class BurgerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         hamburger = this.gameObject.GetComponent<Hambuger>();
         spriteRenderer.color = hamburger.color;
-        hamburger.timeToEndMission = 240;
-        hamburger.activeMission = true;
+        hamburger.timeToEndMission = 60;
+        hamburger.activeMission = true; 
         vehicleController.player.IncreaseHambugerCount();
         parkingLotGameObject = this.gameObject.transform.GetChild(0).gameObject;
         parkingLotGameObject.SetActive(true);

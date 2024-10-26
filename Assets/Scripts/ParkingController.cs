@@ -10,13 +10,13 @@ public class ParkingController : MonoBehaviour
     public BurgerController burgerController;
     void OnTriggerStay2D(Collider2D other)
     {
-        
+        //MISSION SUCCES
         AudioSource successAudio;
         if(other.tag == "Player" )
         {
             VehicleController vehicleController = other.GetComponent<VehicleController>();
             player = vehicleController.player;
-            if((float)player.Velocity == 0f && !hasBeenTriggered && player.GetHambugers() > 0)
+            if((float)player.actualSpeed == 0f && !hasBeenTriggered && player.GetHambugers() > 0)
             {
                 hasBeenTriggered = true;
                 successAudio = GetComponent<AudioSource>();

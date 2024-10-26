@@ -57,7 +57,7 @@ public class HambugerSpawnerController : MonoBehaviour
         this.needToSpawn = true;
     }
 
-    void SpotHambuger(int index)
+    void SpotHambuger(int index) //NEW HAMBURGER IS SPOTTED IN THE SCENE
     {
         needToSpawn = false;
         Transform transform= listOfHamburgerToStop[index];
@@ -68,7 +68,7 @@ public class HambugerSpawnerController : MonoBehaviour
         hamburger.color = GetColor();
         hamburger.visibleOnMap = true;
         hamburger.timeToPickMission = 240;
-        canvasController.AddNewHamburger(hamburger);
+        canvasController.AddNewHamburger(hamburger); //ADD HAMBUGER REFERENCE IN CANVAS
         VisibleMissionsOnMap++;
     }
 
