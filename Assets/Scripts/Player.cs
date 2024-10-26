@@ -16,6 +16,7 @@ public class Player
     private float reverseMaxVelocity = 10f;
     private int HamburgerCount = 0;
     List<BurgerController> hamburgers;
+    public float fuellevel;
     
     public Player(float AccelerationRate)
     {

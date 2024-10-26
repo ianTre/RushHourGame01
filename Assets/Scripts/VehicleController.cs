@@ -45,7 +45,7 @@ public class VehicleController : MonoBehaviour
         transform.Rotate(0,0,-steerAmount);
         transform.Translate(0,moveAmount,0);
     }
-
+    // Max: -14,7 - Min: 174.55
     // Update is called once per frame
     /*
     void Update()
