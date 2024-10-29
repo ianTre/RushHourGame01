@@ -8,7 +8,7 @@ using UnityEngine;
 public class FuelController : MonoBehaviour
 {
     Player player; 
-    float fulltank = 100;
+    float fulltank = 1000;
     [SerializeField] float fueltest;
     // Start is called before the first frame update
     //Max: -17 - Min: 176.83
@@ -22,13 +22,24 @@ public class FuelController : MonoBehaviour
         if(player == null)
         {
             player = FindObjectOfType<VehicleController>().player;
-            player.fuellevel = 100;
-       }        
-
-        player.fuellevel = player.fuellevel - Time.deltaTime;
+            player.fuellevel = 1000;
+        }        
+   
+        if(player.fuellevel >=0)
+        {
+            if(player.actualSpeed > 0)
+            {
+            player.fuellevel = player.fuellevel - (player.actualSpeed/2);
+            }
+            else
+            {
+            player.fuellevel = player.fuellevel + (player.actualSpeed/2);
+            }
+        //player.fuellevel = player.fuellevel - Time.deltaTime;
         Vector3 Zrotation = new Vector3(0,0,0);
         Zrotation.z = FuelconversionfromfolattoZrotation(player.fuellevel);
         this.transform.eulerAngles = Zrotation;
+        }
     }
 
     private float FuelconversionfromfolattoZrotation(float fuellevel)
