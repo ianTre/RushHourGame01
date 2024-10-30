@@ -29,17 +29,27 @@ public class FuelController : MonoBehaviour
         {
             if(player.actualSpeed > 0)
             {
-            player.fuellevel = player.fuellevel - (player.actualSpeed/2);
+                player.fuellevel = player.fuellevel - (player.actualSpeed/2);
             }
             else
             {
             player.fuellevel = player.fuellevel + (player.actualSpeed/2);
             }
-        //player.fuellevel = player.fuellevel - Time.deltaTime;
+        
         Vector3 Zrotation = new Vector3(0,0,0);
         Zrotation.z = FuelconversionfromfolattoZrotation(player.fuellevel);
         this.transform.eulerAngles = Zrotation;
+        
         }
+    }
+
+    public void Refuel(float refuelAmount)
+    {
+        this.player.fuellevel += refuelAmount;
+        if(this.player.fuellevel >= fulltank) 
+        {
+            this.player.fuellevel = fulltank;
+        } 
     }
 
     private float FuelconversionfromfolattoZrotation(float fuellevel)
