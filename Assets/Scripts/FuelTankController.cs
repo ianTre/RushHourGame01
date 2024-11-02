@@ -6,7 +6,7 @@ using UnityEngine;
 public class FuelTankController : MonoBehaviour
 {
     FuelController fuelController;
-    private float refuelAmmount = 100;
+    private float refuelAmmount = 250;
     void Start()
     {
         fuelController = FindObjectOfType<FuelController>();
@@ -17,6 +17,7 @@ public class FuelTankController : MonoBehaviour
         if(other.tag !=  "Player")
             return;
         fuelController.Refuel(refuelAmmount);
+        this.gameObject.SetActive(false);
     }
     
 }

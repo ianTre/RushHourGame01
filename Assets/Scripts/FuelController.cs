@@ -27,13 +27,14 @@ public class FuelController : MonoBehaviour
    
         if(player.fuellevel >=0)
         {
-            if(player.actualSpeed > 0)
+            if(player.actualSpeed > 0) //Going forward
             {
                 player.fuellevel = player.fuellevel - (player.actualSpeed/2);
             }
-            else
+            else if(player.actualSpeed < 0) //Going backwards
             {
-            player.fuellevel = player.fuellevel + (player.actualSpeed/2);
+                
+                player.fuellevel = player.fuellevel + (player.actualSpeed/2);
             }
         
         Vector3 Zrotation = new Vector3(0,0,0);

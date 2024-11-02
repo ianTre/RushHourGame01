@@ -9,23 +9,23 @@ using UnityEngine.UIElements;
 
 public class VehicleController : MonoBehaviour
 {
-    AudioSource accelerateSound; 
+    CarSoundsController carSoundsController;
     public Transform myTransform;
     public Player player ;
     [SerializeField] float Initialacceleration;
     [SerializeField] float velocity;
     [SerializeField] float rotationSpeed;
     [SerializeField] ParticleSystem smoke;
+    public float deleteMe;
 
     private bool isSmokeActive = false;
-    private bool isCarsoundActive = false;
 
     // Start is called before the first frame update
     void Start()
     {
         myTransform = this.GetComponent<Transform>();
         player = new Player(Initialacceleration);
-        accelerateSound = GetComponent<AudioSource>();
+        carSoundsController = GetComponent<CarSoundsController>();
     }
 
     void Update()
@@ -36,55 +36,44 @@ public class VehicleController : MonoBehaviour
         AccelerationGradient actualGradient = CalculateGradient(horizontalInput , verticalInput);
 
         this.velocity = player.CalculateSpeed(actualGradient);
-        
-        if(player.fuellevel >= 0f)   
-        {   
         float steerAmount = horizontalInput * rotationSpeed * fixedTime;
         float moveAmount = verticalInput  * velocity * fixedTime;
+        CalculateAccelerateSoundVolume(moveAmount,verticalInput);
+        if(player.fuellevel <= 0f)   
+        {
+            carSoundsController.StopAllSounds();
+            StopSmoke();
+            moveAmount = moveAmount /8 ;
+        }   
         player.actualSpeed = moveAmount;
-
-        CalculateAccelerateSoundVolume(moveAmount);
+        deleteMe = player.fuellevel;
+        
         transform.Rotate(0,0,-steerAmount);
         transform.Translate(0,moveAmount,0);
-        }
-        else
-        {
-            StopSmoke();
-            StopCarSound();
-            accelerateSound.Stop();
-        }
+        
     }
     
 
-    private void CalculateAccelerateSoundVolume(float moveAmount)
+    private void CalculateAccelerateSoundVolume(float moveAmount,float verticualInput)
     {
-        if(moveAmount > 0)
+        if(player.fuellevel <= 0)
+            return;
+
+        if (moveAmount > 0 )
         {
-            if(!isCarsoundActive)
-            {
-                accelerateSound.Play();
-                this.isCarsoundActive = true;
-            }
+            carSoundsController.ReproduceMovingSound(verticualInput);
         }
         else
         {
-            Invoke("StopCarSound", 0.1f);
+            carSoundsController.ReproduceStandingSound();
         }
-
-        float soundFraction =  (player.VelocityRate - player.minVelocity) / player.maxVelocity  / 2;
-        accelerateSound.volume = soundFraction;
-        if(soundFraction == 0 && !isCarsoundActive)
-            accelerateSound.Stop();
     }
+
 
     private void StopSmoke()
     {
         this.isSmokeActive = false;
         smoke.Stop();
-    }
-    private void StopCarSound()
-    {
-        this.isCarsoundActive = false;
     }
 
     private AccelerationGradient CalculateGradient(float horizontalInput , float verticalInput)
@@ -113,82 +102,3 @@ public class VehicleController : MonoBehaviour
         return gradient;
     }
 }
-// Max: -14,7 - Min: 174.55
-    // Update is called once per frame
-    /*
-    void Update()
-    {
-        AccelerationGradient ActualGradient = AccelerationGradient.None;
-        
-        upArrowKeyPressed = Input.GetKeyDown(KeyCode.UpArrow);
-        upArrowKeyReleased = Input.GetKeyUp(KeyCode.UpArrow);
-         
-        if (upArrowKeyPressed && !isCarsoundActive)
-        {
-            accelerateSound.Play();
-            this.isCarsoundActive = true;
-        }
-
-        if (upArrowKeyReleased && isCarsoundActive)
-        {
-            
-        }
-
-        if (Input.GetAxis("Vertical") == 1)
-        {
-            ActualGradient = AccelerationGradient.Accelerate;
-         
-        }
-
-        if(Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") == 1)
-        {
-            ActualGradient = AccelerationGradient.FastAccelerate;
-            
-            if(!isSmokeActive)
-            {
-                smoke.Play();
-                Invoke("StopSmoke",2);
-                this.isSmokeActive = true;
-            }
-        }
-        
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") == -1)
-        {
-            ActualGradient = AccelerationGradient.FastAccelerate;
-           
-        }
-
-        if (Input.GetAxis("Vertical") == -1)
-        {
-            ActualGradient = AccelerationGradient.Deccelerate;
-  
-        }
-
-          if(Input.GetAxis("Horizontal") == 1)
-        {
-            if(this.player.Velocity != 0)
-                this.transform.Rotate(0,0,-1 * rotationSpeed);
-        }
-
-          if(Input.GetAxis("Horizontal") == -1)
-        {
-            if(this.player.Velocity != 0)
-                this.transform.Rotate(0,0,rotationSpeed);
-        }
-
-        if (Input.GetKey(KeyCode.Space) )
-        {
-            ActualGradient = AccelerationGradient.HandBreake;
-       
-        }
-
-        //Accelerate
-        player.CalculateAcceleration(ActualGradient);
-        this.velocity = player.Velocity;
-        //Accelerate sound
-        CalculateAccelerateSoundVolume();
-    
-        //Player movement
-        Vector3 vector3 = new Vector3(0,velocity * Time.deltaTime,0);
-        this.myTransform.Translate(vector3);
-    }*/
