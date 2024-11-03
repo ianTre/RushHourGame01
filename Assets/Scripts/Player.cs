@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
 public class Player
 {
     public int Lives { get; set; }
-    private int score = 0;
+    private int score = 1000;
     public float VelocityRate { get; set; }
     public float actualSpeed;
     public float Accelaration { get; set; }
@@ -92,10 +93,14 @@ public class Player
     {
         return this.score;
     }
-
+   
     public void IncreaseScore(int amount)
     {
         this.score = this.score + amount;
+    }
+    public void DecreaseScore(int amount)
+    {
+        this.score = this.score - amount;
     }
 
 }

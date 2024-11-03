@@ -11,20 +11,29 @@ public class GasStation : MonoBehaviour
     VehicleController vehicleController;
     FuelController fuelController;
     Player player; 
-    float refuelAmount = 1;
+    float refuelAmount = 1f;
+    
     float fulltank = 1000;
     bool carInsideStation = false;
+    AudioSource tankfilling;
+    bool isfueltank = false;
 
     public void Start()
     {
         vehicleController =  FindObjectOfType<VehicleController>();
         fuelController = FindObjectOfType<FuelController>();
+
     }
 
     public void Update()
     {
         if(carInsideStation)
-            fuelController.Refuel(refuelAmount);
+        {
+            fuelController.Refuel(refuelAmount * Time.deltaTime, isfueltank);
+                    
+        }
+
+    
     }
 
 
@@ -34,13 +43,26 @@ public class GasStation : MonoBehaviour
         {
             carInsideStation = true;
             mainCamera.nearClipPlane = 30;
+            int score = vehicleController.player.Score();
+            if(vehicleController.player.fuellevel < 1000 && score > 0)
+            {
+            tankfilling = GetComponent<AudioSource>();
+            tankfilling.Play();
+            }
         }
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        Debug.Log("Hey i am here");
-        
+        if(other.tag == "Player")
+        { 
+            
+            if(vehicleController.player.fuellevel == 1000)
+            {
+                tankfilling = GetComponent<AudioSource>();
+                tankfilling.Stop();
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -48,7 +70,9 @@ public class GasStation : MonoBehaviour
         if(other.tag == "Player")
         {
             carInsideStation = false;
-            mainCamera.nearClipPlane = 0.5f;
+            mainCamera.nearClipPlane = 0.01f;
+            tankfilling = GetComponent<AudioSource>();
+            tankfilling.Stop();
         }
     }
 }

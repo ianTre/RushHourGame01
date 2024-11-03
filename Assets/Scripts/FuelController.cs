@@ -10,6 +10,9 @@ public class FuelController : MonoBehaviour
     Player player; 
     float fulltank = 1000;
     [SerializeField] float fueltest;
+
+    int playerscore;
+    int scoreFloatToInt;
     // Start is called before the first frame update
     //Max: -17 - Min: 176.83
     void Start()
@@ -44,13 +47,32 @@ public class FuelController : MonoBehaviour
         }
     }
 
-    public void Refuel(float refuelAmount)
-    {
-        this.player.fuellevel += refuelAmount;
-        if(this.player.fuellevel >= fulltank) 
+    public void Refuel(float refuelAmount, bool isfueltank)
+    {   
+        if(!isfueltank)
         {
-            this.player.fuellevel = fulltank;
-        } 
+            playerscore = player.Score();
+            
+            if(playerscore > 0)
+            {
+                this.player.fuellevel += refuelAmount;
+                scoreFloatToInt = (int)refuelAmount;
+                this.player.DecreaseScore(scoreFloatToInt);
+                if(this.player.fuellevel >= fulltank) 
+                {
+                    this.player.fuellevel = fulltank;
+                } 
+            }
+        }
+        else
+        {
+           this.player.fuellevel += refuelAmount;
+           if(this.player.fuellevel >= fulltank) 
+           {
+                this.player.fuellevel = fulltank;
+           } 
+
+        }
     }
 
     private float FuelconversionfromfolattoZrotation(float fuellevel)
