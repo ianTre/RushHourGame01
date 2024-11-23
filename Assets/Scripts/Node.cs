@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,18 +9,26 @@ public class Node : MonoBehaviour
 {
     public Node Origin;
     public List<Node> Connections;
+    public int Id;
 
+    void Start()
+    {
+        this.transform.rotation = Quaternion.identity;
+    }
+
+
+    
     public Node GetNextMove()
     {
         if(Connections.Count == 0)
             return this;
 
+        /*Pick Random Option on each Intersection*/
         List<Node> possibleMovements = Connections.Where(x => x != Origin).ToList();
-        //TODO : If there are more than one option , choose with random.
-
-        //TODO
-
-        return possibleMovements[0];
+        int optionsNumber = possibleMovements.Count;
+        System.Random random  = new System.Random();
+        int randomNumber = random.Next(0,optionsNumber); //NOTE : Next is always lesser than max number. So Next(0,1) will always be 0. 
+        return possibleMovements[randomNumber];
     }
 
     private void OnDrawGizmos()
