@@ -19,6 +19,6 @@ public class MainCameraControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        cameraTransform.position = new UnityEngine.Vector3(playerTransform.position.x,playerTransform.position.y,cameraTransform.position.z);     
+        cameraTransform.position = new UnityEngine.Vector3(playerTransform.position.x,playerTransform.position.y - 1 ,cameraTransform.position.z);     
     }
 }
