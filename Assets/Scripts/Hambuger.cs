@@ -53,4 +53,10 @@ public class Hambuger : MonoBehaviour
         
     }
 
+
+    public Transform getParkingLot()
+    {
+        return this.transform.Find("ParkingLot");
+    }
+
 }

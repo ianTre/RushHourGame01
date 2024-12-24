@@ -57,6 +57,7 @@ public class CanvasGameController : MonoBehaviour
         int index = 0;
         foreach (var burger in burgers)
         {
+            
             burgerIcons[index].transform.position = positions[index]; //REVIEW THIS. IS NOT WORKING.
             burger.AssociateIcon(burgerIcons[index].gameObject);
             if (burger.visibleOnMap)
@@ -67,7 +68,9 @@ public class CanvasGameController : MonoBehaviour
 
             if (burger.activeMission) //6000 : 5998 / 2
             {
+                #region SLIDER
                 Transform slider = burgerIcons[index].transform.Find("Slider");
+                Transform arrow = burgerIcons[index].transform.Find("Arrow");
 
 
                 if (!burger.hasBeingColored)
@@ -76,6 +79,8 @@ public class CanvasGameController : MonoBehaviour
                     fill.GetComponent<Image>().color = burger.color;
                     slider.GetComponent<Slider>().maxValue = burger.timeToEndMission;
                     burger.hasBeingColored = true;
+                    arrow.GetComponent<Image>().color = burger.color; //SET THE COLOR FOR THE ARROW THAT POINTS WHERE THE PARKING LOT IS
+                    arrow.GetComponent<ArrowDirectionController>().AssociateHamburgerToArrow(burger);
                 }
                 else
                 {
@@ -86,8 +91,11 @@ public class CanvasGameController : MonoBehaviour
                 {
                     burger.beingTracked = false;
                 }
+                #endregion
             }
             index++;
+            
         }
+        
     }
 }

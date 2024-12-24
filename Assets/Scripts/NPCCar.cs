@@ -41,8 +41,6 @@ public class NPCCar : MonoBehaviour
     {
         System.Random random  = new System.Random();
         int randomNumber = random.Next(0,2);
-        Debug.Log(randomNumber);
-
 
         if(TargetNode == null)
         {

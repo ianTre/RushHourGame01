@@ -23,7 +23,7 @@ public class FuelTankSpawnerController : MonoBehaviour
     {
         if(!spawnHasBeingTriggered)
         {
-            Invoke("ActivateFuelTank",10);
+            Invoke("ActivateFuelTank",5);
             spawnHasBeingTriggered = true;
         }
     }
