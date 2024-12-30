@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 public class Player
 {
     public int Lives { get; set; }
-    private int score = 1000;
+    private int score = 0;
     public float VelocityRate { get; set; }
     public float actualSpeed;
     public float Accelaration { get; set; }

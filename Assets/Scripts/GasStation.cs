@@ -11,7 +11,7 @@ public class GasStation : MonoBehaviour
     VehicleController vehicleController;
     FuelController fuelController;
     Player player; 
-    float refuelAmount = 1f;
+    float refuelAmount = 10f;
     
     float fulltank = 1000;
     bool carInsideStation = false;
