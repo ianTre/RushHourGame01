@@ -24,7 +24,7 @@ public class Node : MonoBehaviour
             return this;
 
         /*Pick Random Option on each Intersection*/
-        List<Node> possibleMovements = Connections.Where(x => x != Origin).ToList();
+        List<Node> possibleMovements = Connections.ToList();
         int optionsNumber = possibleMovements.Count;
         System.Random random  = new System.Random();
         int randomNumber = random.Next(0,optionsNumber); //NOTE : Next is always lesser than max number. So Next(0,1) will always be 0. 

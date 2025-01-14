@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
-using Unity.Mathematics;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -19,7 +16,15 @@ public class NPCCar : MonoBehaviour
     [SerializeField]
     Quaternion quaternion;
     public float NPCSpeed = 10;
+    Rigidbody2D Npcrigidbody;
+    public float waitUntil = 0.1f;
     
+    private void Start()
+    {
+        Npcrigidbody = GetComponent<Rigidbody2D>();
+        Npcrigidbody.mass = Random.Range(5,999);
+    }
+
     private void Update()
     {
         GetNextNode();
@@ -52,5 +57,30 @@ public class NPCCar : MonoBehaviour
             TargetNode = actualNode.GetNextMove();
         }
         return this.TargetNode;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision) 
+    {
+        if(collision.gameObject.tag != "NPC")
+            return;
+        if (waitUntil > 0 )
+        {
+            waitUntil = waitUntil- Time.deltaTime;
+        }
+        else
+        {
+            int range; 
+            if(this.gameObject.name.Sum(x => (int)x) > collision.gameObject.name.Sum(x => (int)x))
+            {
+                range = Random.Range(7000,9999);
+            }
+            else
+            {
+                range = Random.Range(1,250);
+            }
+            GetComponent<Rigidbody2D>().mass = range;
+            Debug.Log("Changing mass of NPC " + this.gameObject.name + range.ToString());
+            waitUntil = Random.Range(0.1f,1);
+        }
     }
 }

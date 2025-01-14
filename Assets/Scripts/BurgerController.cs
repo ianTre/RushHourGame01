@@ -1,9 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.PlasticSCM.Editor;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BurgerController : MonoBehaviour

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ParkingLot
   - BurgerTimeFill
+  - NPC
   layers:
   - Default
   - TransparentFX
